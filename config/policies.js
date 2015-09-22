@@ -49,9 +49,6 @@ module.exports.policies = {
 		// feed : ['isNiceToAnimals', 'hasRabbitFood']
 	// }
   
-  'UserController': {
-    'findOneEmail': 'isAuthenticated'
-  },
   'AuthController': {
     'auth': 'isAuthenticated',
     'logout': 'isAuthenticated',

@@ -5,36 +5,10 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
-var findOneEmail = function (req, res) {
-	sails.log.debug("*******************findOneEmail(" + req.param('email') + ")");
-	var query = {
-		bool: {
-			must: [
-				{
-					term: {
-						"user.email": req.param('email')
-					}
-				}
-			]
-		}
-	};
-
-	User.findOne(query).exec(function (err, user) {
-		if (err) res.json({ error: 'oups error' }, 500);
-		if (user) {
-			res.json(user)
-		} else {
-			res.json({ message: 'User not found' }, 404);
-		}
-	});
-};
-
 module.exports = {
-	findOneEmail: findOneEmail,
-
+	
 	find: function (req, res) {
-		sails.log.debug("*******************find()");
-		User.find().exec(function (err, users) {
+		UserService.find(function (err, users) {
 			if (err) res.json({ error: 'oups error' }, 500);
 			if (users) {
 				res.json(users);
@@ -45,20 +19,7 @@ module.exports = {
 	},
 
 	findOne: function (req, res) {
-		sails.log.debug("*******************findOne(" + req.param('id') + ")");
-		var query = {
-			bool: {
-				must: [
-					{
-						term: {
-							id: req.param('id')
-						}
-					}
-				]
-			}
-		};
-
-		User.findOne(query).exec(function (err, user) {
+		UserService.findOne(req.param('id'), function (err, user) {
 			if (err) res.json({ error: 'oups error' }, 500);
 			if (user) {
 				res.json(user)
@@ -67,27 +28,9 @@ module.exports = {
 			}
 		});
 	},
-
-	connect: function (req, res) {
-		sails.log.debug("*******************connect(" + req.param('id') + ", " + req.param('password') + ")");
-		var query = {
-			bool: {
-				must: [
-					{
-						term: {
-							email: req.param('email')
-						}
-					},
-					{
-						term: {
-							password: req.param('password')
-						}
-					}
-				]
-			}
-		};
-
-		User.findOne(query).exec(function (err, user) {
+	
+	findOneEmail: function (req, res) {	
+		UserService.findOneEmail(req.param('email'), function(err, user) {
 			if (err) res.json({ error: 'oups error' }, 500);
 			if (user) {
 				res.json(user)
@@ -98,12 +41,10 @@ module.exports = {
 	},
 
 	create: function (req, res) {
-		sails.log.debug("*******************create()");
-
-		User.create(req.body).exec(function (err, users) {
+		UserService.create(req.body, function (err, user) {
 			if (err) res.json({ error: 'oups error' }, 500);
-			if (users) {
-				res.json(users)
+			if (user) {
+				res.json(user)
 			} else {
 				res.json({ message: 'User not create' }, 404);
 			}
@@ -111,20 +52,7 @@ module.exports = {
 	},
 
 	update: function (req, res) {
-		sails.log.debug("*******************update(" + req.param('id') + ")");
-		var query = {
-			bool: {
-				must: [
-					{
-						term: {
-							id: req.param('id')
-						}
-					}
-				]
-			}
-		};
-
-		User.update(query, req.body).exec(function (err, user) {
+		UserService.update(req.param('id'), req.body, function (err, user) {
 			if (err) res.json({ error: 'oups error' }, 500);
 			if (user) {
 				res.json(user)

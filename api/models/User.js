@@ -29,11 +29,16 @@ module.exports = {
       required: true,
       minLength: 6
     },
+    role: {
+      type: 'string',
+      required: true,
+      enum: ['Admin', 'User']
+    },
     toJSON: function() {
           var obj = this.toObject();
           delete obj.password;
           return obj;
-      }
+    }
   },
   
   mapping: {

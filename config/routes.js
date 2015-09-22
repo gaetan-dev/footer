@@ -48,7 +48,6 @@ module.exports.routes = {
   
   /* User */
   'post /user/findOneEmail': 'UserController.findOneEmail',
-  'post /user/connect': 'UserController.connect',
   'put /user': 'UserController.update',
   
   /* Auth */
