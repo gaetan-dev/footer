@@ -35,9 +35,9 @@ module.exports = {
       enum: ['Admin', 'User']
     },
     toJSON: function() {
-          var obj = this.toObject();
-          delete obj.password;
-          return obj;
+      var obj = this.toObject();
+      delete obj.password;
+      return obj;
     }
   },
   

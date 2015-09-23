@@ -47,12 +47,15 @@ module.exports.routes = {
   ***************************************************************************/
   
   /* User */
-  'post /user/findOneEmail': 'UserController.findOneEmail',
-  'put /user': 'UserController.update',
+  'post /user/findOneEmail/': 'UserController.findOneEmail',
+  'put /user/': 'UserController.update',
+  
+  /* Availability */
+  'put /availability/': 'AvailabilityController.update',
   
   /* Auth */
-  'post /login': 'AuthController.login',
-  '/logout': 'AuthController.logout',
-  '/auth': 'AuthController.auth',
+  'post /login/': 'AuthController.login',
+  '/logout/': 'AuthController.logout',
+  '/auth/': 'AuthController.auth',
   
 };

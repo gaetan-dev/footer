@@ -53,7 +53,7 @@ module.exports = {
 		});
 	},
 	
-	update: function (id, body, res) {
+	update: function (id, body, callback) {
 		sails.log.debug('******************* User.update(' + id + ')');
 		var query = {
 			bool: {

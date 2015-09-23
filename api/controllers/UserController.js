@@ -9,19 +9,19 @@ module.exports = {
 	
 	find: function (req, res) {
 		UserService.find(function (err, users) {
-			if (err) res.json({ error: 'oups error' }, 500);
-			if (users) {
+			if (err) res.json(err, 500);
+			else if (users) {
 				res.json(users);
 			} else {
-				res.json({ message: 'User not found' }, 404);
+				res.json({ message: 'Users not found' }, 404);
 			}
 		});
 	},
 
 	findOne: function (req, res) {
 		UserService.findOne(req.param('id'), function (err, user) {
-			if (err) res.json({ error: 'oups error' }, 500);
-			if (user) {
+			if (err) res.json(err, 500);
+			else if (user) {
 				res.json(user)
 			} else {
 				res.json({ message: 'User not found' }, 404);
@@ -31,8 +31,8 @@ module.exports = {
 	
 	findOneEmail: function (req, res) {	
 		UserService.findOneEmail(req.param('email'), function(err, user) {
-			if (err) res.json({ error: 'oups error' }, 500);
-			if (user) {
+			if (err) res.json(err, 500);
+			else if (user) {
 				res.json(user)
 			} else {
 				res.json({ message: 'User not found' }, 404);
@@ -42,8 +42,8 @@ module.exports = {
 
 	create: function (req, res) {
 		UserService.create(req.body, function (err, user) {
-			if (err) res.json({ error: 'oups error' }, 500);
-			if (user) {
+			if (err) res.json(err, 500);
+			else if (user) {
 				res.json(user)
 			} else {
 				res.json({ message: 'User not create' }, 404);
@@ -53,8 +53,8 @@ module.exports = {
 
 	update: function (req, res) {
 		UserService.update(req.param('id'), req.body, function (err, user) {
-			if (err) res.json({ error: 'oups error' }, 500);
-			if (user) {
+			if (err) res.json(err, 500);
+			else if (user) {
 				res.json(user)
 			} else {
 				res.json({ message: 'User not update' }, 404);
