@@ -12,3 +12,13 @@ Footer API (NodeJs + Sails)
 }
 ```
 
+### Availability
+```json
+{
+	date,
+	hours,
+	mode,
+	user
+}
+```
+

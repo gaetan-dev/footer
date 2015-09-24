@@ -53,6 +53,9 @@ module.exports.routes = {
   /* Availability */
   'put /availability/': 'AvailabilityController.update',
   
+  /* Event */
+  'post /event/': 'EventController.createOne',
+  
   /* Auth */
   'post /login/': 'AuthController.login',
   '/logout/': 'AuthController.logout',
