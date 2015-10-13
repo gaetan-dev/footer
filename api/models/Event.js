@@ -23,6 +23,15 @@ module.exports = {
         required: true,
         enum: ['match'],
       },
+      place: {
+        type: 'string',
+        required: true,
+        enum: ['Urban Foot']
+      },
+      private: {
+        type: 'boolean',
+        defaultsTo: false
+      },
       master: {
         type: 'json',
         required: true,
