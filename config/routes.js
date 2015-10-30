@@ -45,20 +45,25 @@ module.exports.routes = {
   * for configuration options and examples.                                  *
   *                                                                          *
   ***************************************************************************/
-  
+
   /* User */
-  'post /user/findOneEmail/': 'UserController.findOneEmail',
+  'get /user/': 'UserController.find',
+  'post /user/': 'UserController.create',
   'put /user/': 'UserController.update',
-  
+
   /* Availability */
+  'get /availability/:param?': 'AvailabilityController.find',
+  // 'get /availability/?userId=id': 'AvailabilityController.findUserId',
+  'get /availability/': 'AvailabilityController.find',
+  'post /availability/': 'AvailabilityController.create',
   'put /availability/': 'AvailabilityController.update',
-  
+
   /* Event */
   'post /event/': 'EventController.createOne',
-  
+
   /* Auth */
   'post /login/': 'AuthController.login',
   '/logout/': 'AuthController.logout',
   '/auth/': 'AuthController.auth',
-  
+
 };

@@ -20,23 +20,6 @@ module.exports = {
       type: 'string',
       required: true,
       enum: ['unknown', 'available', 'perhaps', 'unavailable'],
-    },
-    user: {
-      type: 'json',
-      required: true,
-    },
-    toJSON: function() {
-      var obj = this.toObject();
-      delete obj.user.password;
-      return obj;
-    }
-  },
-  
-  mapping: {
-    email: {
-      type: 'string',
-      index: 'not_analyzed'
     }
   },
 };
-

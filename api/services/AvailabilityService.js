@@ -4,123 +4,100 @@
 
 var find = function (callback) {
   sails.log.debug('******************* Availability.find()');
-  Availability.find().exec(function (err, availabilities) {
+
+  var availabilities = [];
+  User.find().exec(function (err, users) {
+    users.forEach(function (user) {
+      user.availabilities.forEach(function (availability) {
+        availability.user = {
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email
+        };
+        availabilities.push(availability);
+      });
+    });
     callback(err, availabilities);
   });
 };
 
-var findUserId = function (user_id, callback) {
-  sails.log.debug('******************* Availability.findUserId(' + user_id + ')');
+var findUserId = function (userId, callback) {
+  sails.log.debug('******************* Availability.findUserId(' + userId + ')');
   var query = {
     bool: {
       must: [{
         term: {
-          'availability.user': user_id
+          'user.id': userId
         }
       }]
     }
   };
 
-  Availability.find()
-    .where(query)
-    .limit(100000)
-    .exec(function (err, availabilities) {
-      callback(err, availabilities);
-    });
-};
-
-var findOne = function (id, callback) {
-  sails.log.debug('******************* Availability.findOne(' + id + ')');
-  var query = {
-    bool: {
-      must: [{
-        term: {
-          'availability.id': id
-        }
-      }]
-    }
-  };
-
-  Availability.findOne(query).exec(function (err, availability) {
-    callback(err, availability);
-  });
-};
-
-var createOne = function (body, callback) {
-  sails.log.debug('******************* Availability.createOne()');
-
-  UserService.findOne(body.user, function (err, user) {
-
-    body.user = user;
-
-    Availability.create(body).exec(function (err, availability) {
-      callback(err, availability);
-    });
+  User.find().where(query).limit(1).exec(function (err, users) {
+    callback(err, users[0].availabilities);
   });
 };
 
 var create = function (body, callback) {
   sails.log.debug('******************* Availability.create()');
 
-  var availabilities = body.availabilities;
-  Availability.createEach(availabilities).exec(function (err, availabilities) {
-    callback(err, availabilities);
+  var query = {
+    bool: {
+      must: [{
+        term: {
+          'user.id': body.userId
+        }
+      }]
+    }
+  };
+
+  User.findOne(query).exec(function (err, user) {
+    user.availabilities = user.availabilities.concat(body.availabilities);
+    User.update(query, {
+      availabilities: user.availabilities
+    }).exec(function (err, res) {
+      callback(err, user);
+    });
   });
 };
 
 var update = function (body, callback) {
   sails.log.debug('******************* Availability.update()');
 
-  ids = [];
-  for (var i = 0; i < body.availabilities.length; i++) {
-    ids.push(body.availabilities[i].id);
-  }
-
-  var query = {
-    bool: {
-      should: [{
-        terms: {
-          'availability.id': ids
-        }
-      }]
-    }
-  };
-
-  Availability.update(query, {
-    mode: body.mode
-  }).exec(function (err, availabilities) {
-    callback(err, availabilities);
-  });
-};
-
-var updateOne = function (availability, res, err) {
-  sails.log.debug('******************* Availability.updateOne(' + availability.id + ')');
-
   var query = {
     bool: {
       must: [{
         term: {
-          'availability.id': availability.id
+          'user.id': body.userId,
         }
       }]
     }
   };
 
-  Availability.update(query, {
-    mode: availability.mode
-  }).exec(function (err, res) {
-    if (err) {
-      err = err;
-    } else if (availability) {
-      res = availability;
-    }
+  User.findOne(query).exec(function (err, user) {
+    body.availabilities.forEach(function (bodyAvailability) {
+      user.availabilities.every(function (userAvailability) {
+        if (bodyAvailability.date === userAvailability.date &&
+          bodyAvailability.hours === userAvailability.hours) {
+            userAvailability.mode = bodyAvailability.mode;
+            return false;
+        }
+        return true;
+      });
+    });
+    User.update(query, {
+      availabilities: user.availabilities
+    }).exec(function (err, res) {
+      callback(err, user);
+    });
   });
 };
 
 module.exports = {
+  /* Methodes */
   find: find,
   findUserId: findUserId,
-  findOne: findOne,
   create: create,
   update: update,
 };
