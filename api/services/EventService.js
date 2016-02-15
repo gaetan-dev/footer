@@ -30,7 +30,7 @@ var findUserId = function (user_id, callback) {
 			callback(err, events);
 		});
 };
-	
+
 var findOne = function (id, callback) {
 	sails.log.debug('******************* Event.findOne(' + id + ')');
 	var query = {
@@ -54,10 +54,14 @@ var createOne = function (body, callback) {
 	sails.log.debug('******************* Event.createOne()');
 
 	UserService.findOne(body.master, function (err, user) {
-		
+
 		body.master = user;
-		
+
 		Event.create(body).exec(function (err, event) {
+			EmailService.sendConvocation(event);
+			UserService.find(function (err, users) {
+				EmailService.sendInvitation(event, users);
+			});
 			callback(err, event);
 		});
 	});
@@ -78,7 +82,7 @@ var updateOne = function (body, callback) {
 	};
 
 	Event.update(query, body).exec(function (err, event) {
-		callback(err, event);	
+		callback(err, event);
 	});
 };
 
@@ -87,5 +91,5 @@ module.exports = {
 	findUserId: findUserId,
 	findOne: findOne,
 	createOne: createOne,
-	update: updateOne,
-}
+	update: updateOne
+};

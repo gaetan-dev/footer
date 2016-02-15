@@ -71,9 +71,20 @@ var update = function (id, body, callback) {
   });
 };
 
+var excludeUsersOfArray = function (array, users) {
+  for (var i = 0; i < users.length; i++) {
+    for (var j = 0; j < array.length; j++) {
+      if (users[i].email === array[j].email) {
+        array.splice(j, 1);
+      }
+    }
+  }
+};
+
 module.exports = {
   find: find,
   findOne: findOne,
-	create: create,
-	update: update,
+  create: create,
+  update: update,
+  excludeUsersOfArray: excludeUsersOfArray
 };

@@ -28,9 +28,9 @@ var findUserId = function (req, res) {
     else if (availabilities) {
       res.json(availabilities);
     } else {
-      res.json({
+      res.status(404).json({
         message: 'Availabilities not found'
-      }, 404);
+      });
     }
   });
 };

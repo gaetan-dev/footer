@@ -7,8 +7,8 @@ var find = function (callback) {
 
   var availabilities = [];
   User.find().exec(function (err, users) {
-    users.forEach(function (user) {
-      user.availabilities.forEach(function (availability) {
+    (users || []).forEach(function (user) {
+      (user.availabilities || []).forEach(function (availability) {
         availability.user = {
           id: user.id,
           firstName: user.firstName,
@@ -35,7 +35,7 @@ var findUserId = function (userId, callback) {
   };
 
   User.find().where(query).limit(1).exec(function (err, users) {
-    callback(err, users[0].availabilities);
+    callback(err, (users[0].availabilities || []));
   });
 };
 
@@ -53,6 +53,9 @@ var create = function (body, callback) {
   };
 
   User.findOne(query).exec(function (err, user) {
+    if (!user.availabilities) {
+      user.availabilities = [];
+    }
     user.availabilities = user.availabilities.concat(body.availabilities);
     User.update(query, {
       availabilities: user.availabilities
