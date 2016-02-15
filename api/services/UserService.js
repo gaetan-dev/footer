@@ -65,7 +65,7 @@ var update = function (id, body, callback) {
       }]
     }
   };
-
+  console.log(body);
   User.update(query, body).exec(function (err, user) {
     callback(err, user);
   });
